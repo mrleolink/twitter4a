@@ -1,13 +1,12 @@
 #Twitter4A - Twitter For Android
----
 This is an open-source Android Library that is built on top of <a href="https://github.com/yusuke/twitter4j/">Twitter4J</a>.<br />
 Twitter4A provides the easiest way to integrate "Sign in with Twitter" function into your apps and still gives you all what Twitter4J can do.
 
 ##Screenshots
-![before login][1]
-![login dialog][2]
-![logging in][3]
-![logged in][4]
+<img src="https://raw.github.com/mrleolink/Twitter4A/master/screenshots/before_login.png" width="180" height="300" alt="before login">&nbsp;&nbsp;
+<img src="https://raw.github.com/mrleolink/Twitter4A/master/screenshots/login_dialog.png" width="180" height="300" alt="login dialog">&nbsp;&nbsp;
+<img src="https://raw.github.com/mrleolink/Twitter4A/master/screenshots/logging_in.png" width="180" height="300" alt="loggin in">&nbsp;&nbsp;
+<img src="https://raw.github.com/mrleolink/Twitter4A/master/screenshots/logged_in.png" width="180" height="300" alt="logged in">
 
 ##Features
  - Modal login dialog
@@ -163,9 +162,3 @@ Portions of LoginDialog.java:
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-
-  [1]: https://raw.github.com/mrleolink/Twitter4A/master/screenshots/before_login.png
-  [2]: https://raw.github.com/mrleolink/Twitter4A/master/screenshots/login_dialog.png
-  [3]: https://raw.github.com/mrleolink/Twitter4A/master/screenshots/logging_in.png
-  [4]: https://raw.github.com/mrleolink/Twitter4A/master/screenshots/logged_in.png
