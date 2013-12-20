@@ -1,7 +1,7 @@
 package net.leolink.android.twitter4a;
 import net.leolink.android.twitter4a.utils.Constants;
-import net.leolink.android.twitter4a.widget.Spinner;
 import net.leolink.android.twitter4a.widget.LoginDialog;
+import net.leolink.android.twitter4a.widget.Spinner;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -9,8 +9,7 @@ import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
-import android.app.ProgressDialog;
-import android.content.Context;
+import android.app.Activity;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -28,12 +27,12 @@ public abstract class Twitter4A {
 	// twitter4a's objects
 	private String mConsumerKey;
 	private String mConsumerSecret;
-	private Context mContext;
+	private Activity mContext;
 	private boolean isLoggedIn = false;
 	private boolean isLoggingIn = false;
 
 	// Constructor
-	public Twitter4A(Context context, String consumerKey,
+	public Twitter4A(Activity context, String consumerKey,
 			String consumerSecret) {
 		mContext = context;
 		mConsumerKey = consumerKey;
@@ -67,7 +66,8 @@ public abstract class Twitter4A {
 				@Override
 				protected void onProgressUpdate(String... values) {
 					// open LoginDialog to let user login to Twitter
-					new LoginDialog(mContext, Twitter4A.this, values[0]).show();			
+					if (!mContext.isFinishing())
+						new LoginDialog(mContext, Twitter4A.this, values[0]).show();			
 				}			
 			}.execute();
 
