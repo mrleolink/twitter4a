@@ -185,6 +185,8 @@ public class LoginDialog extends Dialog{
             public void onClick(View v) {
                 //sendCancelToListener();
                 LoginDialog.this.dismiss();
+                // callback
+                Twitter4A.loginFailedCallback();
             }
         });
         Drawable crossDrawable = getContext().getResources().getDrawable(R.drawable.close);
