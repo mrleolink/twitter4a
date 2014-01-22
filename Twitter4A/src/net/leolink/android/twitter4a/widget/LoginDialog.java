@@ -148,6 +148,12 @@ public class LoginDialog extends Dialog{
         		new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 	}
 	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		mTwitter4A.loginFailedCallback();
+	}	
+	
     private Pair<Integer, Integer> getMargins() {
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
