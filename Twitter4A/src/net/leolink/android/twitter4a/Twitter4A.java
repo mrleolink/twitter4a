@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Window;
+import android.webkit.CookieManager;
 
 public abstract class Twitter4A {
 	public final static String TAG = "twitter4a";
@@ -100,10 +101,6 @@ public abstract class Twitter4A {
 				try {
 					mTwitterAccessToken = mTwitter.getOAuthAccessToken(mTwitterRequestToken, verifier);
 					mTwitterUser = mTwitter.showUser(mTwitterAccessToken.getUserId());
-					
-					// Notify to call loginCallback (the callback may affect on
-					// UI, so that's why we need to use AsyncTask here)
-					publishProgress();
 				} catch (TwitterException e) {
 					// call loginFailedCallback
 					loginFailedCallback();
@@ -113,8 +110,11 @@ public abstract class Twitter4A {
 				return null;
 			}
 			
-			protected void onProgressUpdate(Void... values) {
+			protected void onPostExecute(Void result) {
 				if (spinner.isShowing()) {
+					// enable cookie
+					CookieManager.getInstance().setAcceptCookie(true);
+	
 					// dismiss the spinner
 					spinner.dismiss();
 					
@@ -129,9 +129,9 @@ public abstract class Twitter4A {
 					mTwitterAccessToken = null;
 					mTwitterRequestToken = null;
 					mTwitterUser = null;
-
+	
 					// call loginFailedCallback
-					loginFailedCallback();
+					loginFailedCallback();			
 				}
 			}
 		}.execute();
