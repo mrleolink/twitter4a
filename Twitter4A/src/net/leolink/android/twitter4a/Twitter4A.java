@@ -112,11 +112,6 @@ public abstract class Twitter4A {
 			
 			protected void onPostExecute(Void result) {
 				if (spinner.isShowing()) {
-					// enable cookie
-					CookieSyncManager.createInstance(mContext);
-					CookieManager cookieManager = CookieManager.getInstance();
-				     	cookieManager.setAcceptCookie(true);	
-	
 					// dismiss the spinner
 					spinner.dismiss();
 					
