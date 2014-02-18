@@ -205,11 +205,6 @@ public class LoginDialog extends Dialog{
     
     @SuppressLint("SetJavaScriptEnabled")
     private void setUpWebView(int margin) {
-    	// prevent WebView from saving cookie automatically
-    	CookieSyncManager.createInstance(mContext);
-    	CookieManager cookieManager = CookieManager.getInstance();
-    	cookieManager.setAcceptCookie(false);
-    	
     	// setup WebView 
         LinearLayout webViewContainer = new LinearLayout(getContext());
         webView = new WebView(getContext());
