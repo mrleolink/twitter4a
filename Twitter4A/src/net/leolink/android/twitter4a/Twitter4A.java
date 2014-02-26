@@ -58,6 +58,9 @@ public abstract class Twitter4A {
 						mTwitterRequestToken = mTwitter.getOAuthRequestToken(Constants.TWITTER_CALLBACK_PREFIX);
 						publishProgress(mTwitterRequestToken.getAuthenticationURL());
 					} catch (TwitterException e) {
+						// call loginFailedCallback
+						loginFailedCallback();
+						
 						e.printStackTrace();
 					}					
 					
