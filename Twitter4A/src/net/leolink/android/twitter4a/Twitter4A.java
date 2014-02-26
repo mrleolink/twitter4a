@@ -58,10 +58,10 @@ public abstract class Twitter4A {
 						mTwitterRequestToken = mTwitter.getOAuthRequestToken(Constants.TWITTER_CALLBACK_PREFIX);
 						publishProgress(mTwitterRequestToken.getAuthenticationURL());
 					} catch (TwitterException e) {
+						e.printStackTrace();
+
 						// call loginFailedCallback
 						loginFailedCallback();
-						
-						e.printStackTrace();
 					}					
 					
 					return null;
@@ -105,10 +105,10 @@ public abstract class Twitter4A {
 					mTwitterAccessToken = mTwitter.getOAuthAccessToken(mTwitterRequestToken, verifier);
 					mTwitterUser = mTwitter.showUser(mTwitterAccessToken.getUserId());
 				} catch (TwitterException e) {
+					e.printStackTrace();
+					
 					// call loginFailedCallback
 					loginFailedCallback();
-					
-					e.printStackTrace();
 				}
 				return null;
 			}
