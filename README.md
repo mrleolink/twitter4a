@@ -53,6 +53,12 @@ That's all, you are ready to use!
 				super.loginFailedCallback();
 				// TODO You also can override loginFailedCallback if you want
 			}
+
+			@Override
+			public void cancelCallback() {
+				super.cancelCallback();
+				// TODO You also can override cancelCallback if you want
+			}
 		};
 		
 		// then use the Twitter4A object to log in/out
@@ -78,6 +84,7 @@ That's all, you are ready to use!
  - `protected abstract void loginCallback()`
  - `protected abstract void logoutCallback()`
  - `public void loginFailedCallback()`
+ - `public void cancelCallback()`
 
 ###Other Getters that you may want
 ```java

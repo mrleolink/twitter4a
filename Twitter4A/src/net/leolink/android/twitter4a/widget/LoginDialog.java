@@ -112,8 +112,8 @@ public class LoginDialog extends Dialog{
 			public void onCancel(DialogInterface dialog) {
 				LoginDialog.this.dismiss();
 
-				// call loginFailedCallback
-				mTwitter4A.loginFailedCallback();
+				// call cancelCallback
+				mTwitter4A.cancelCallback();
 			}
 		});
 
@@ -151,7 +151,7 @@ public class LoginDialog extends Dialog{
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		mTwitter4A.loginFailedCallback();
+		mTwitter4A.cancelCallback();
 	}	
 	
     private Pair<Integer, Integer> getMargins() {
@@ -192,7 +192,7 @@ public class LoginDialog extends Dialog{
                 //sendCancelToListener();
                 LoginDialog.this.dismiss();
                 // callback
-                Twitter4A.loginFailedCallback();
+                mTwitter4A.cancelCallback();
             }
         });
         Drawable crossDrawable = getContext().getResources().getDrawable(R.drawable.close);

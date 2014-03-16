@@ -165,6 +165,11 @@ public abstract class Twitter4A {
 		Log.e(TAG, "Login failed!");
 	}
 	
+	// this method is called when LoginDialog is closed by user
+	public void cancelCallback() {
+		Log.i(TAG, "Login dialog has been closed!");
+	}
+
 	public void setLoggingIn(boolean isLoggingIn) {
 		this.isLoggingIn = isLoggingIn;
 	}
