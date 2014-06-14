@@ -1,8 +1,5 @@
 package net.leolink.android.twitter4a.widget;
 
-import net.leolink.android.twitter4a.R;
-import net.leolink.android.twitter4a.Twitter4A;
-import net.leolink.android.twitter4a.utils.Constants;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -16,13 +13,12 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -30,6 +26,11 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+
+import net.leolink.android.twitter4a.R;
+import net.leolink.android.twitter4a.Twitter4A;
+import net.leolink.android.twitter4a.utils.Const;
 
 /*
  * Some functions of this class were completely or partially taken from:
@@ -54,7 +55,7 @@ import android.widget.LinearLayout;
  *  limitations under the License.
  * 
  */
-public class LoginDialog extends Dialog{
+public class LoginDialog extends Dialog {
 	// width below which there are no extra margins
     private static final int NO_BUFFER_SCREEN_WIDTH = 512;
     // width beyond which we're always using the MIN_SCALE_FACTOR
@@ -70,9 +71,10 @@ public class LoginDialog extends Dialog{
     private Twitter4A mTwitter4A;
 	private String url;
 	private FrameLayout contentFrameLayout;
-	private Spinner spinner;
+    private View spinner;
 	private ImageView crossImageView;
 	private WebView webView;
+    private boolean isSucceeded;
 	
 	public LoginDialog(Context context, Twitter4A t4a, String url) {
 		// Since it took me like 2 or 3 hours to figured out that I have to set
@@ -95,32 +97,26 @@ public class LoginDialog extends Dialog{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		// when this dialog is closed
 		setOnDismissListener(new OnDismissListener() {
-			@Override
-			public void onDismiss(DialogInterface dialog) {
-				mTwitter4A.setLoggingIn(false);
-			}
-		});
-
-		// initialize spinner
-		spinner = new Spinner(mContext);
-		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		spinner.setOnCancelListener(new OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				LoginDialog.this.dismiss();
-
-				// call cancelCallback
-				mTwitter4A.cancelCallback();
-			}
-		});
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (!isSucceeded) {
+                    if (webView != null) webView.stopLoading();
+                    // cancelled callback
+                    if(!mTwitter4A.isStopped()) mTwitter4A.onCancelled();
+                }
+            }
+        });
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		contentFrameLayout = new FrameLayout(getContext());
 		contentFrameLayout.setBackgroundColor(BACKGROUND_GRAY);
-		
+
+        // initialize a spinner
+        spinner = new ProgressBar(mContext);
+
         // First calculate the margins around the frame layout
         Pair<Integer, Integer> margins = getMargins();
         contentFrameLayout.setPadding(margins.first, margins.second, margins.first, margins.second);
@@ -144,16 +140,10 @@ public class LoginDialog extends Dialog{
         contentFrameLayout.addView(crossImageView, new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        setContentView(contentFrameLayout,
-        		new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        setContentView(contentFrameLayout, new LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
 	}
-	
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		mTwitter4A.cancelCallback();
-	}	
-	
+
     private Pair<Integer, Integer> getMargins() {
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -191,8 +181,6 @@ public class LoginDialog extends Dialog{
             public void onClick(View v) {
                 //sendCancelToListener();
                 LoginDialog.this.dismiss();
-                // callback
-                mTwitter4A.cancelCallback();
             }
         });
         Drawable crossDrawable = getContext().getResources().getDrawable(R.drawable.close);
@@ -232,16 +220,20 @@ public class LoginDialog extends Dialog{
         webViewContainer.addView(webView);
         webViewContainer.setBackgroundColor(BACKGROUND_GRAY);
         contentFrameLayout.addView(webViewContainer);
-    }    
+        // add spinner
+        contentFrameLayout.addView(spinner, new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+    }
 
     // Extends WebViewClient to make call back
     private class DialogWebViewClient extends WebViewClient {
     	@Override
     	public boolean shouldOverrideUrlLoading(WebView view, String url) {
     		// login successfully
-    		if (url.startsWith(Constants.TWITTER_CALLBACK_PREFIX)) {
+    		if (url.startsWith(Const.TWITTER_CALLBACK_PREFIX)) {
+                isSucceeded = true;
     			// dismiss this dialog
-    			LoginDialog.this.dismiss();
+                dismiss();
     			
     			// save user's data
     			mTwitter4A.handleSuccessfulLogin(url);
@@ -260,9 +252,9 @@ public class LoginDialog extends Dialog{
     	@Override
     	public void onPageStarted(WebView view, String url, Bitmap favicon) {
     		super.onPageStarted(view, url, favicon);
-    		spinner.show();
+            spinner.setVisibility(View.VISIBLE);
     	}
-    	
+
     	@Override
     	public void onPageFinished(WebView view, String url) {
     		super.onPageFinished(view, url);
@@ -271,10 +263,10 @@ public class LoginDialog extends Dialog{
              * Once web view is fully loaded, set the contentFrameLayout background to be transparent
              * and make visible the 'x' image.
              */
-    		spinner.dismiss();
             contentFrameLayout.setBackgroundColor(Color.TRANSPARENT);
             webView.setVisibility(View.VISIBLE);
-            crossImageView.setVisibility(View.VISIBLE);	
+            crossImageView.setVisibility(View.VISIBLE);
+            spinner.setVisibility(View.GONE);
     	}
     }    
 }
