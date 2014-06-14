@@ -20,7 +20,7 @@ Twitter4A is an open-source Android Library that is built on top of <a href="htt
 - Supports API 8+
 
 **Notice:**
-<del>~~Since this library was created with the main purpose that is provide the easiest way to integrate "Sign in with Twitter" function into your apps, so it doesn't help to manage things like cookie or session, it only provides a nice modal login dialog, some callbacks, and if the login progress is succeeded, it will give you basic user data like username, userID as well as all Twitter4J objects.~~</del>
+<del>Since this library was created with the main purpose that is provide the easiest way to integrate "Sign in with Twitter" function into your apps, so it doesn't help to manage things like cookie or session, it only provides a nice modal login dialog, some callbacks, and if the login progress is succeeded, it will give you basic user data like username, userID as well as all Twitter4J objects.</del>
 
 Twitter4A now supports session management by static functions:
 
