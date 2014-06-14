@@ -59,7 +59,7 @@ Twitter4A now supports session management by static functions:
 		findViewById(R.id.twitter_login_button).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				if (!mTwitter4a.isLoggedIn())
+				if (!Twitter4A.isLoggedIn(context))
 					mTwitter4a.login();
 				else
 					mTwitter4a.logout();
