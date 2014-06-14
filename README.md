@@ -45,14 +45,12 @@ Twitter4A now supports session management by static functions:
 				// TODO get user's data or post a twitter on behalf of the logged in user or do whatever you want here
 			}
 			@Override
-			public void loginFailedCallback() {
-				super.loginFailedCallback();
+			public void onFailed() {
                 // TODO This callback is called when login progress couldn't succeed for some reasons
 			}
 
 			@Override
-			public void cancelCallback() {
-				super.cancelCallback();
+			public void onCancelled() {
                 // TODO This callback is called when login progress is explicitly cancelled by user
 			}
 		};
